@@ -1,0 +1,30 @@
+{
+  "name": "qbittorrent-api-v2",
+  "version": "1.0.0",
+  "description": "Wrapper around qBittorrent's Web API v2 to manage your torrents from Node. Documented and everything.",
+  "main": "src/qbt.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test/qbt-tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheFlow95/node-qbittorrent-api-v2.git"
+  },
+  "keywords": [
+    "qbittorrent",
+    "bittorrent",
+    "torrent",
+    "client",
+    "interface",
+    "api"
+  ],
+  "author": "TheFlow95",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheFlow95/node-qbittorrent-api-v2/issues"
+  },
+  "homepage": "https://github.com/TheFlow95/node-qbittorrent-api-v2#readme"
+}
