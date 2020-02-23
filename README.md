@@ -144,27 +144,27 @@ This method returns an object allowing to call the other methods of the API.
 
 ### Get torrent generic properties
 
-**TODO**
+`properties(hash)`
 
 ### Get torrent trackers
 
-**TODO**
+`trackers(hash)`
 
 ### Get torrent web seeds
 
-**TODO**
+`webseeds(hash)`
 
 ### Get torrent contents
 
-**TODO**
+`files(hash)`
 
 ### Get torrent pieces' states
 
-**TODO**
+`pieceStates(hash)`
 
 ### Get torrent pieces' hashes
 
-**TODO**
+`pieceHashes(hash)`
 
 ### Pause torrents
 

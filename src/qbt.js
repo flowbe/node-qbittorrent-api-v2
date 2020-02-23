@@ -28,11 +28,11 @@ exports.connect = async (host, username, password) => {
 			},
 			/**
 			 * @typedef {Object} BuildInfo
-			 * @param {string} qt - QT version
-			 * @param {string} libtorrent - libtorrent version
-			 * @param {string} boost - Boost version
-			 * @param {string} openssl - OpenSSL version
-			 * @param {string} bitness - Application bitness (e.g. 64-bit)
+			 * @property {string} qt - QT version
+			 * @property {string} libtorrent - libtorrent version
+			 * @property {string} boost - Boost version
+			 * @property {string} openssl - OpenSSL version
+			 * @property {string} bitness - Application bitness (e.g. 64-bit)
 			 */
 			/**
 			 * Get build info
@@ -49,107 +49,107 @@ exports.connect = async (host, username, password) => {
 			},
 			/**
 			 * @typedef {Object} Preferences
-			 * {string} locale - Currently selected language (e.g. en_GB for English)
-			 * {boolean} create_subfolder_enabled - True if a subfolder should be created when adding a torrent
-			 * {boolean} start_paused_enabled - True if torrents should be added in a Paused state
-			 * {number} auto_delete_mode
-			 * {boolean} preallocate_all - True if disk space should be pre-allocated for all files
-			 * {boolean} incomplete_files_ext - True if ".!qB" should be appended to incomplete files
-			 * {boolean} auto_tmm_enabled - True if Automatic Torrent Management is enabled by default
-			 * {boolean} torrent_changed_tmm_enabled - True if torrent should be relocated when its Category changes
-			 * {boolean} save_path_changed_tmm_enabled - True if torrent should be relocated when the default save path changes
-			 * {boolean} category_changed_tmm_enabled - True if torrent should be relocated when its Category's save path changes
-			 * {string} save_path - Default save path for torrents, separated by slashes
-			 * {boolean} temp_path_enabled - True if folder for incomplete torrents is enabled
-			 * {string} temp_path - Path for incomplete torrents, separated by slashes
-			 * {Object} scan_dirs - Property: directory to watch for torrent files, value: where torrents loaded from this directory should be downloaded to (see list of possible values below). Slashes are used as path separators; multiple key/value pairs can be specified
-			 * {string} export_dir - Path to directory to copy .torrent files to. Slashes are used as path separators
-			 * {string} export_dir_fin - Path to directory to copy .torrent files of completed downloads to. Slashes are used as path separators
-			 * {boolean} mail_notification_enabled - True if e-mail notification should be enabled
-			 * {string} mail_notification_sender - e-mail where notifications should originate from
-			 * {string} mail_notification_email - e-mail to send notifications to
-			 * {string} mail_notification_smtp - smtp server for e-mail notifications
-			 * {boolean} mail_notification_ssl_enabled - True if smtp server requires SSL connection
-			 * {boolean} mail_notification_auth_enabled - True if smtp server requires authentication
-			 * {string} mail_notification_username - Username for smtp authentication
-			 * {string} mail_notification_password - Password for smtp authentication
-			 * {boolean} autorun_enabled - True if external program should be run after torrent has finished downloading
-			 * {string} autorun_program - Program path/name/arguments to run if autorun_enabled is enabled; path is separated by slashes; you can use %f and %n arguments, which will be expanded by qBittorent as path_to_torrent_file and torrent_name (from the GUI; not the .torrent file name) respectively
-			 * {boolean} queueing_enabled - True if torrent queuing is enabled
-			 * {number} max_active_downloads - Maximum number of active simultaneous downloads
-			 * {number} max_active_torrents - Maximum number of active simultaneous downloads and uploads
-			 * {number} max_active_uploads - Maximum number of active simultaneous uploads
-			 * {boolean} dont_count_slow_torrents - If true torrents w/o any activity (stalled ones) will not be counted towards max_active_* limits; see dont_count_slow_torrents for more information
-			 * {number} slow_torrent_dl_rate_threshold - Download rate in KiB/s for a torrent to be considered "slow"
-			 * {number} slow_torrent_ul_rate_threshold - Upload rate in KiB/s for a torrent to be considered "slow"
-			 * {number} slow_torrent_inactive_timer - Seconds a torrent should be inactive before considered "slow"
-			 * {boolean} max_ratio_enabled - True if share ratio limit is enabled
-			 * {float} max_ratio - Get the global share ratio limit
-			 * {boolean} max_ratio_act - Action performed when a torrent reaches the maximum share ratio. See list of possible values here below.
-			 * {number} listen_port - Port for incoming connections
-			 * {boolean} upnp - True if UPnP/NAT-PMP is enabled
-			 * {boolean} random_port - True if the port is randomly selected
-			 * {number} dl_limit - Global download speed limit in KiB/s; -1 means no limit is applied
-			 * {number} up_limit - Global upload speed limit in KiB/s; -1 means no limit is applied
-			 * {number} max_connec - Maximum global number of simultaneous connections
-			 * {number} max_connec_per_torrent - Maximum number of simultaneous connections per torrent
-			 * {number} max_uploads - Maximum number of upload slots
-			 * {number} max_uploads_per_torrent - Maximum number of upload slots per torrent
-			 * {boolean} enable_utp - True if uTP protocol should be enabled; this option is only available in qBittorent built against libtorrent version 0.16.X and higher
-			 * {boolean} limit_utp_rate - True if [du]l_limit should be applied to uTP connections; this option is only available in qBittorent built against libtorrent version 0.16.X and higher
-			 * {boolean} limit_tcp_overhead - True if [du]l_limit should be applied to estimated TCP overhead (service data: e.g. packet headers)
-			 * {boolean} limit_lan_peers - True if [du]l_limit should be applied to peers on the LAN
-			 * {number} alt_dl_limit - Alternative global download speed limit in KiB/s
-			 * {number} alt_up_limit - Alternative global upload speed limit in KiB/s
-			 * {boolean} scheduler_enabled - True if alternative limits should be applied according to schedule
-			 * {number} schedule_from_hour - Scheduler starting hour
-			 * {number} schedule_from_min - Scheduler starting minute
-			 * {number} schedule_to_hour - Scheduler ending hour
-			 * {number} schedule_to_min - Scheduler ending minute
-			 * {number} scheduler_days - Scheduler days. See possible values here below
-			 * {boolean} dht - True if DHT is enabled
-			 * {boolean} dhtSameAsBT - True if DHT port should match TCP port
-			 * {number} dht_port - DHT port if dhtSameAsBT is false
-			 * {boolean} pex - True if PeX is enabled
-			 * {boolean} lsd - True if LSD is enabled
-			 * {number} encryption - See list of possible values here below
-			 * {boolean} anonymous_mode - If true anonymous mode will be enabled; read more here; this option is only available in qBittorent built against libtorrent version 0.16.X and higher
-			 * {number} proxy_type - See list of possible values here below
-			 * {string} proxy_ip - Proxy IP address or domain name
-			 * {number} proxy_port - Proxy port
-			 * {boolean} proxy_peer_connections - True if peer and web seed connections should be proxified; this option will have any effect only in qBittorent built against libtorrent version 0.16.X and higher
-			 * {boolean} force_proxy - True if the connections not supported by the proxy are disabled
-			 * {boolean} proxy_auth_enabled - True proxy requires authentication; doesn't apply to SOCKS4 proxies
-			 * {string} proxy_username - Username for proxy authentication
-			 * {string} proxy_password - Password for proxy authentication
-			 * {boolean} ip_filter_enabled - True if external IP filter should be enabled
-			 * {string} ip_filter_path - Path to IP filter file (.dat, .p2p, .p2b files are supported); path is separated by slashes
-			 * {boolean} ip_filter_trackers - True if IP filters are applied to trackers
-			 * {string} web_ui_domain_list - Comma-separated list of domains to accept when performing Host header validation
-			 * {string} web_ui_address - IP address to use for the WebUI
-			 * {number} web_ui_port - WebUI port
-			 * {boolean} web_ui_upnp - True if UPnP is used for the WebUI port
-			 * {string} web_ui_username - WebUI username
-			 * {string} web_ui_password - For API ≥ v2.3.0: Plaintext WebUI password, not readable, write-only. For API < v2.3.0: MD5 hash of WebUI password, hash is generated from the following string: username:Web UI Access:plain_text_web_ui_password
-			 * {boolean} web_ui_csrf_protection_enabled - True if WebUI CSRF protection is enabled
-			 * {boolean} web_ui_clickjacking_protection_enabled - True if WebUI clickjacking protection is enabled
-			 * {boolean} bypass_local_auth - True if authentication challenge for loopback address (127.0.0.1) should be disabled
-			 * {boolean} bypass_auth_subnet_whitelist_enabled - True if webui authentication should be bypassed for clients whose ip resides within (at least) one of the subnets on the whitelist
-			 * {string} bypass_auth_subnet_whitelist - (White)list of ipv4/ipv6 subnets for which webui authentication should be bypassed; list entries are separated by commas
-			 * {boolean} alternative_webui_enabled - True if an alternative WebUI should be used
-			 * {string} alternative_webui_path - File path to the alternative WebUI
-			 * {boolean} use_https - True if WebUI HTTPS access is enabled
-			 * {string} ssl_key - SSL keyfile contents (this is a not a path)
-			 * {string} ssl_cert - SSL certificate contents (this is a not a path)
-			 * {boolean} dyndns_enabled - True if server DNS should be updated dynamically
-			 * {number} dyndns_service - See list of possible values here below
-			 * {string} dyndns_username - Username for DDNS service
-			 * {string} dyndns_password - Password for DDNS service
-			 * {string} dyndns_domain - Your DDNS domain name
-			 * {number} rss_refresh_interval - RSS refresh interval
-			 * {number} rss_max_articles_per_feed - Max stored articles per RSS feed
-			 * {boolean} rss_processing_enabled - Enable processing of RSS feeds
-			 * {boolean} rss_auto_downloading_enabled - Enable auto-downloading of torrents from the RSS feeds
+			 * @property {string} locale - Currently selected language (e.g. en_GB for English)
+			 * @property {boolean} create_subfolder_enabled - True if a subfolder should be created when adding a torrent
+			 * @property {boolean} start_paused_enabled - True if torrents should be added in a Paused state
+			 * @property {number} auto_delete_mode
+			 * @property {boolean} preallocate_all - True if disk space should be pre-allocated for all files
+			 * @property {boolean} incomplete_files_ext - True if ".!qB" should be appended to incomplete files
+			 * @property {boolean} auto_tmm_enabled - True if Automatic Torrent Management is enabled by default
+			 * @property {boolean} torrent_changed_tmm_enabled - True if torrent should be relocated when its Category changes
+			 * @property {boolean} save_path_changed_tmm_enabled - True if torrent should be relocated when the default save path changes
+			 * @property {boolean} category_changed_tmm_enabled - True if torrent should be relocated when its Category's save path changes
+			 * @property {string} save_path - Default save path for torrents, separated by slashes
+			 * @property {boolean} temp_path_enabled - True if folder for incomplete torrents is enabled
+			 * @property {string} temp_path - Path for incomplete torrents, separated by slashes
+			 * @property {Object} scan_dirs - Property: directory to watch for torrent files, value: where torrents loaded from this directory should be downloaded to (see list of possible values below). Slashes are used as path separators; multiple key/value pairs can be specified
+			 * @property {string} export_dir - Path to directory to copy .torrent files to. Slashes are used as path separators
+			 * @property {string} export_dir_fin - Path to directory to copy .torrent files of completed downloads to. Slashes are used as path separators
+			 * @property {boolean} mail_notification_enabled - True if e-mail notification should be enabled
+			 * @property {string} mail_notification_sender - e-mail where notifications should originate from
+			 * @property {string} mail_notification_email - e-mail to send notifications to
+			 * @property {string} mail_notification_smtp - smtp server for e-mail notifications
+			 * @property {boolean} mail_notification_ssl_enabled - True if smtp server requires SSL connection
+			 * @property {boolean} mail_notification_auth_enabled - True if smtp server requires authentication
+			 * @property {string} mail_notification_username - Username for smtp authentication
+			 * @property {string} mail_notification_password - Password for smtp authentication
+			 * @property {boolean} autorun_enabled - True if external program should be run after torrent has finished downloading
+			 * @property {string} autorun_program - Program path/name/arguments to run if autorun_enabled is enabled; path is separated by slashes; you can use %f and %n arguments, which will be expanded by qBittorent as path_to_torrent_file and torrent_name (from the GUI; not the .torrent file name) respectively
+			 * @property {boolean} queueing_enabled - True if torrent queuing is enabled
+			 * @property {number} max_active_downloads - Maximum number of active simultaneous downloads
+			 * @property {number} max_active_torrents - Maximum number of active simultaneous downloads and uploads
+			 * @property {number} max_active_uploads - Maximum number of active simultaneous uploads
+			 * @property {boolean} dont_count_slow_torrents - If true torrents w/o any activity (stalled ones) will not be counted towards max_active_* limits; see dont_count_slow_torrents for more information
+			 * @property {number} slow_torrent_dl_rate_threshold - Download rate in KiB/s for a torrent to be considered "slow"
+			 * @property {number} slow_torrent_ul_rate_threshold - Upload rate in KiB/s for a torrent to be considered "slow"
+			 * @property {number} slow_torrent_inactive_timer - Seconds a torrent should be inactive before considered "slow"
+			 * @property {boolean} max_ratio_enabled - True if share ratio limit is enabled
+			 * @property {float} max_ratio - Get the global share ratio limit
+			 * @property {boolean} max_ratio_act - Action performed when a torrent reaches the maximum share ratio. See list of possible values here below.
+			 * @property {number} listen_port - Port for incoming connections
+			 * @property {boolean} upnp - True if UPnP/NAT-PMP is enabled
+			 * @property {boolean} random_port - True if the port is randomly selected
+			 * @property {number} dl_limit - Global download speed limit in KiB/s; -1 means no limit is applied
+			 * @property {number} up_limit - Global upload speed limit in KiB/s; -1 means no limit is applied
+			 * @property {number} max_connec - Maximum global number of simultaneous connections
+			 * @property {number} max_connec_per_torrent - Maximum number of simultaneous connections per torrent
+			 * @property {number} max_uploads - Maximum number of upload slots
+			 * @property {number} max_uploads_per_torrent - Maximum number of upload slots per torrent
+			 * @property {boolean} enable_utp - True if uTP protocol should be enabled; this option is only available in qBittorent built against libtorrent version 0.16.X and higher
+			 * @property {boolean} limit_utp_rate - True if [du]l_limit should be applied to uTP connections; this option is only available in qBittorent built against libtorrent version 0.16.X and higher
+			 * @property {boolean} limit_tcp_overhead - True if [du]l_limit should be applied to estimated TCP overhead (service data: e.g. packet headers)
+			 * @property {boolean} limit_lan_peers - True if [du]l_limit should be applied to peers on the LAN
+			 * @property {number} alt_dl_limit - Alternative global download speed limit in KiB/s
+			 * @property {number} alt_up_limit - Alternative global upload speed limit in KiB/s
+			 * @property {boolean} scheduler_enabled - True if alternative limits should be applied according to schedule
+			 * @property {number} schedule_from_hour - Scheduler starting hour
+			 * @property {number} schedule_from_min - Scheduler starting minute
+			 * @property {number} schedule_to_hour - Scheduler ending hour
+			 * @property {number} schedule_to_min - Scheduler ending minute
+			 * @property {number} scheduler_days - Scheduler days. See possible values here below
+			 * @property {boolean} dht - True if DHT is enabled
+			 * @property {boolean} dhtSameAsBT - True if DHT port should match TCP port
+			 * @property {number} dht_port - DHT port if dhtSameAsBT is false
+			 * @property {boolean} pex - True if PeX is enabled
+			 * @property {boolean} lsd - True if LSD is enabled
+			 * @property {number} encryption - See list of possible values here below
+			 * @property {boolean} anonymous_mode - If true anonymous mode will be enabled; read more here; this option is only available in qBittorent built against libtorrent version 0.16.X and higher
+			 * @property {number} proxy_type - See list of possible values here below
+			 * @property {string} proxy_ip - Proxy IP address or domain name
+			 * @property {number} proxy_port - Proxy port
+			 * @property {boolean} proxy_peer_connections - True if peer and web seed connections should be proxified; this option will have any effect only in qBittorent built against libtorrent version 0.16.X and higher
+			 * @property {boolean} force_proxy - True if the connections not supported by the proxy are disabled
+			 * @property {boolean} proxy_auth_enabled - True proxy requires authentication; doesn't apply to SOCKS4 proxies
+			 * @property {string} proxy_username - Username for proxy authentication
+			 * @property {string} proxy_password - Password for proxy authentication
+			 * @property {boolean} ip_filter_enabled - True if external IP filter should be enabled
+			 * @property {string} ip_filter_path - Path to IP filter file (.dat, .p2p, .p2b files are supported); path is separated by slashes
+			 * @property {boolean} ip_filter_trackers - True if IP filters are applied to trackers
+			 * @property {string} web_ui_domain_list - Comma-separated list of domains to accept when performing Host header validation
+			 * @property {string} web_ui_address - IP address to use for the WebUI
+			 * @property {number} web_ui_port - WebUI port
+			 * @property {boolean} web_ui_upnp - True if UPnP is used for the WebUI port
+			 * @property {string} web_ui_username - WebUI username
+			 * @property {string} web_ui_password - For API ≥ v2.3.0: Plaintext WebUI password, not readable, write-only. For API < v2.3.0: MD5 hash of WebUI password, hash is generated from the following string: username:Web UI Access:plain_text_web_ui_password
+			 * @property {boolean} web_ui_csrf_protection_enabled - True if WebUI CSRF protection is enabled
+			 * @property {boolean} web_ui_clickjacking_protection_enabled - True if WebUI clickjacking protection is enabled
+			 * @property {boolean} bypass_local_auth - True if authentication challenge for loopback address (127.0.0.1) should be disabled
+			 * @property {boolean} bypass_auth_subnet_whitelist_enabled - True if webui authentication should be bypassed for clients whose ip resides within (at least) one of the subnets on the whitelist
+			 * @property {string} bypass_auth_subnet_whitelist - (White)list of ipv4/ipv6 subnets for which webui authentication should be bypassed; list entries are separated by commas
+			 * @property {boolean} alternative_webui_enabled - True if an alternative WebUI should be used
+			 * @property {string} alternative_webui_path - File path to the alternative WebUI
+			 * @property {boolean} use_https - True if WebUI HTTPS access is enabled
+			 * @property {string} ssl_key - SSL keyfile contents (this is a not a path)
+			 * @property {string} ssl_cert - SSL certificate contents (this is a not a path)
+			 * @property {boolean} dyndns_enabled - True if server DNS should be updated dynamically
+			 * @property {number} dyndns_service - See list of possible values here below
+			 * @property {string} dyndns_username - Username for DDNS service
+			 * @property {string} dyndns_password - Password for DDNS service
+			 * @property {string} dyndns_domain - Your DDNS domain name
+			 * @property {number} rss_refresh_interval - RSS refresh interval
+			 * @property {number} rss_max_articles_per_feed - Max stored articles per RSS feed
+			 * @property {boolean} rss_processing_enabled - Enable processing of RSS feeds
+			 * @property {boolean} rss_auto_downloading_enabled - Enable auto-downloading of torrents from the RSS feeds
 			 */
 			/**
 			 * Get application preferences
@@ -219,10 +219,119 @@ exports.connect = async (host, username, password) => {
 			 * @param {number} limit - Limit the number of torrents returned
 			 * @param {number} offset - Set offset (if less than 0, offset from end)
 			 * @param {string} hashes - Filter by hashes. Can contain multiple hashes separated by |
-			 * @return {Promise<Torrent[]>} Array of torrents
+			 * @return {Promise<Torrent[]>} Torrents
 			 */
 			torrents: async (filter, category, sort, reverse, limit, offset, hashes) => {
 				return await torrents(host, cookie, filter, category, sort, reverse, limit, offset, hashes)
+			},
+			/**
+			 * @typedef {Object} TorrentInfo
+			 * @property {string} save_path - Torrent save path
+			 * @property {number} creation_date - Torrent creation date (Unix timestamp)
+			 * @property {number} piece_size - Torrent piece size (bytes)
+			 * @property {string} comment - Torrent comment
+			 * @property {number} total_wasted - Total data wasted for torrent (bytes)
+			 * @property {number} total_uploaded - Total data uploaded for torrent (bytes)
+			 * @property {number} total_uploaded_session - Total data uploaded this session (bytes)
+			 * @property {number} total_downloaded - Total data downloaded for torrent (bytes)
+			 * @property {number} total_downloaded_session - Total data downloaded this session (bytes)
+			 * @property {number} up_limit - Torrent upload limit (bytes/s)
+			 * @property {number} dl_limit - Torrent download limit (bytes/s)
+			 * @property {number} time_elapsed - Torrent elapsed time (seconds)
+			 * @property {number} seeding_time - Torrent elapsed time while complete (seconds)
+			 * @property {number} nb_connections - Torrent connection count
+			 * @property {number} nb_connections_limit - Torrent connection count limit
+			 * @property {number} share_ratio - Torrent share ratio
+			 * @property {number} addition_date - When this torrent was added (unix timestamp)
+			 * @property {number} completion_date - Torrent completion date (unix timestamp)
+			 * @property {string} created_by - Torrent creator
+			 * @property {number} dl_speed_avg - Torrent average download speed (bytes/second)
+			 * @property {number} dl_speed - Torrent download speed (bytes/second)
+			 * @property {number} eta - Torrent ETA (seconds)
+			 * @property {number} last_seen - Last seen complete date (unix timestamp)
+			 * @property {number} peers - Number of peers connected to
+			 * @property {number} peers_total - Number of peers in the swarm
+			 * @property {number} pieces_have - Number of pieces owned
+			 * @property {number} pieces_num - Number of pieces of the torrent
+			 * @property {number} reannounce - Number of seconds until the next announce
+			 * @property {number} seeds - Number of seeds connected to
+			 * @property {number} seeds_total - Number of seeds in the swarm
+			 * @property {number} total_size - Torrent total size (bytes)
+			 * @property {number} up_speed_avg - Torrent average upload speed (bytes/second)
+			 * @property {number} up_speed - Torrent upload speed (bytes/second)
+			 */
+			/**
+			 * Get torrent generic properties
+			 * @param {string} hash - The hash of the torrent you want to get the generic properties of
+			 * @return {Promise<TorrentInfo>} Torrent properties
+			 */
+			properties: async (hash) => {
+				return await properties(host, cookie, hash)
+			},
+			/**
+			 * @typedef {Object} Tracker
+			 * @property {string} url - Tracker url
+			 * @property {number} status - Tracker status. See the table below for possible values
+			 * @property {number} tier - Tracker priority tier. Lower tier trackers are tried before higher tiers
+			 * @property {number} num_peers - Number of peers for current torrent, as reported by the tracker
+			 * @property {number} num_seeds - Number of seeds for current torrent, asreported by the tracker
+			 * @property {number} num_leeches - Number of leeches for current torrent, as reported by the tracker
+			 * @property {number} num_downloaded - Number of completed downlods for current torrent, as reported by the tracker
+			 * @property {string} msg - Tracker message (there is no way of knowing what this message is - it's up to tracker admins)
+			 */
+			/**
+			 * Get torrent trackers
+			 * @param {string} hash - The hash of the torrent you want to get the trackers of
+			 * @return {Promise<Tracker[]>} Torrent trackers
+			 */
+			trackers: async (hash) => {
+				return await trackers(host, cookie, hash)
+			},
+			/**
+			 * @typedef {Object} Webseed
+			 * @property {string} url - URL of the web seed
+			 */
+			/**
+			 * Get torrent webseeds
+			 * @param {string} hash - The hash of the torrent you want to get the webseeds of
+			 * @return {Promise<Webseed[]>} Torrent webseeds
+			 */
+			webseeds: async (hash) => {
+				return await webseeds(host, cookie, hash)
+			},
+			/**
+			 * @typedef {Object} Content
+			 * @property {string} name - File name (including relative path)
+			 * @property {number} size - File size (bytes)
+			 * @property {number} progress - File progress (percentage/100)
+			 * @property {number} priority - File priority. See possible values here below
+			 * @property {boolean} is_seed - True if file is seeding/complete
+			 * @property {number} piece_range array - The first number is the starting piece index and the second number is the ending piece index (inclusive)
+			 * @property {number} availability - Percentage of file pieces currently available
+			 */
+			/**
+			 * Get torrent contents
+			 * @param {string} hash - The hash of the torrent you want to get the contents of
+			 * @return {Promise<Content[]>} Torrent contents
+			 */
+			files: async (hash) => {
+				return await files(host, cookie, hash)
+			},
+			/**
+			 * Get torrent pieces' states
+			 * @param {string} hash - The hash of the torrent you want to get the pieces' states of
+			 * @return {Promise<(0|1|2)[]>} States (integers) of all pieces (in order) of the torrent
+			 */
+			pieceStates: async (hash) => {
+				return await pieceStates(host, cookie, hash)
+			},
+			/**
+			 * Get torrent pieces' hashes
+			 * @param {string} hash - The hash of the torrent you want to get the pieces' hashes of
+			 * @return {Promise<string[]>} Hashes (strings) of all pieces (in order) of the torrent
+			 */
+			pieceHashes: async (hash) => {
+				return await pieceHashes(host, cookie, hash)
 			},
 			/**
 			 * Pause one or several torrents
@@ -342,6 +451,60 @@ async function torrents(host, cookie, filter, category, sort, reverse, limit, of
 	}
 }
 
+async function properties(host, cookie, hash) {
+	try {
+		const { res } = await performRequest(host, cookie, '/torrents/properties', { hash: hash })
+		return JSON.parse(res)
+	} catch (err) {
+		throw err
+	}
+}
+
+async function trackers(host, cookie, hash) {
+	try {
+		const { res } = await performRequest(host, cookie, '/torrents/trackers', { hash: hash })
+		return JSON.parse(res)
+	} catch (err) {
+		throw err
+	}
+}
+
+async function webseeds(host, cookie, hash) {
+	try {
+		const { res } = await performRequest(host, cookie, '/torrents/webseeds', { hash: hash })
+		return JSON.parse(res)
+	} catch (err) {
+		throw err
+	}
+}
+
+async function files(host, cookie, hash) {
+	try {
+		const { res } = await performRequest(host, cookie, '/torrents/files', { hash: hash })
+		return JSON.parse(res)
+	} catch (err) {
+		throw err
+	}
+}
+
+async function pieceStates(host, cookie, hash) {
+	try {
+		const { res } = await performRequest(host, cookie, '/torrents/pieceStates', { hash: hash })
+		return JSON.parse(res)
+	} catch (err) {
+		throw err
+	}
+}
+
+async function pieceHashes(host, cookie, hash) {
+	try {
+		const { res } = await performRequest(host, cookie, '/torrents/pieceHashes', { hash: hash })
+		return JSON.parse(res)
+	} catch (err) {
+		throw err
+	}
+}
+
 async function pauseTorrents(host, cookie, hashes) {
 	try {
 		await performRequest(host, cookie, '/torrents/pause', { hashes: hashes })
@@ -419,7 +582,7 @@ function performRequest(hostname, cookie, path, parameters) {
 						}
 						resolve({ res: Buffer.concat(data).toString(), cookie: c })
 					} else {
-						reject()
+						reject(new Error(`HTTP request error: ${res.statusCode}`))
 					}
 				})
 		})
