@@ -15,7 +15,7 @@ npm install qbittorrent-api-v2
 ```js
 const api = require('qbittorrent-api-v2')
 
-api.connect('localhost:8080', 'admin', 'your_password')
+api.connect('http://localhost:8080', 'admin', 'your_password')
 	.then(qbt => {
 		qbt.torrents()
 			.then(torrents => {
@@ -136,7 +136,7 @@ This method returns a Promise resolving an object allowing to call the other met
 
 **TODO**
 
-# Torrent management
+## Torrent management
 
 ### Get torrent list
 
