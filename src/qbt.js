@@ -166,6 +166,41 @@ exports.connect = async (host, username, password) => {
 				return await defaultSavePath(host, cookie)
 			},
 			/**
+			 * @typedef {Object} Log
+			 * @property {number} id - ID of the message
+			 * @property {string} message - Text of the message
+			 * @property {number} timestamp - Milliseconds since epoch
+			 * @property {(1|2|4|8)} type - Type of the message (normal: `1`, info: `2`, warning: `4`, critical: `8`)
+			 */
+			/**
+			 * Get log
+			 * @param {boolean} normal - Include normal messages (default: `true`)
+			 * @param {boolean} info - Include info messages (default: `true`)
+			 * @param {boolean} warning - Include warning messages (default: `true`)
+			 * @param {boolean} critical - Include critical messages (default: `true`)
+			 * @param {number} lastKnownId - Exclude messages with "message id" <= `lastKnownId` (default: `-1`)
+			 * @return {Promise<Log[]>} Logs
+			 */
+			log: async (normal, info, warning, critical, lastKnownId) => {
+				return await log(host, cookie, normal, info, warning, critical, lastKnownId)
+			},
+			/**
+			 * @typedef {Object} PeerLog
+			 * @property {number} id - ID of the message
+			 * @property {string} ip - IP of the peer
+			 * @property {number} timestamp - Milliseconds since epoch
+			 * @property {boolean} blocked - Whether or not the peer was blocked
+			 * @property {string} reason - Reason of the block
+			 */
+			/**
+			 * Get peer log
+			 * @param {number} lastKnownId - Exclude messages with "message id" <= `lastKnownId` (default: `-1`)
+			 * @return {Promise<PeerLog[]>} Peer logs
+			 */
+			peerLog: async (lastKnownId) => {
+				return await peerLog(host, cookie, lastKnownId)
+			},
+			/**
 			 * @typedef {Object} Torrent
 			 * @property {number} added_on - Time (Unix Epoch) when the torrent was added to the client
 			 * @property {number} amount_left - Amount of data left to download (bytes)
@@ -652,6 +687,18 @@ async function preferences(host, cookie) {
 async function defaultSavePath(host, cookie) {
 	const { res } = await performRequest(host, cookie, '/app/defaultSavePath', {})
 	return res
+}
+
+// Log
+
+async function log(host, cookie, normal = true, info = true, warning = true, critical = true, lastKnownId = -1) {
+	const { res } = await performRequest(host, cookie, '/log/main', { normal: normal, info: info, warning: warning, critical: critical, last_known_id: lastKnownId })
+	return JSON.parse(res)
+}
+
+async function peerLog(host, cookie, lastKnownId) {
+	const { res } = await performRequest(host, cookie, '/log/peers', { last_known_id: lastKnownId })
+	return JSON.parse(res)
 }
 
 // Torrent management

@@ -84,11 +84,11 @@ This method returns a Promise resolving an object allowing to call the other met
 
 ### Get log
 
-**TODO**
+`log(normal, info, warning, critical, lastKnownId)`
 
 ### Get peer log
 
-**TODO**
+`peerLog(lastKnownId)`
 
 ## Sync
 
