@@ -10,7 +10,7 @@ const ENDPOINT = '/api/v2'
  */
 exports.connect = async (host, username, password) => {
 	try {
-		const { res, cookie } = await performRequest(host, null, '/auth/login', { username: username, password: password })
+		const { cookie } = await performRequest(host, null, '/auth/login', { username: username, password: password })
 		return {
 			/**
 			 * Get application version
@@ -304,7 +304,7 @@ exports.connect = async (host, username, password) => {
 			 * @property {string} name - File name (including relative path)
 			 * @property {number} size - File size (bytes)
 			 * @property {number} progress - File progress (percentage/100)
-			 * @property {number} priority - File priority. See possible values here below
+			 * @property {(0|1|6|7)} priority - File priority.
 			 * @property {boolean} is_seed - True if file is seeding/complete
 			 * @property {number} piece_range array - The first number is the starting piece index and the second number is the ending piece index (inclusive)
 			 * @property {number} availability - Percentage of file pieces currently available
@@ -368,6 +368,253 @@ exports.connect = async (host, username, password) => {
 			 */
 			reannounceTorrents: async (hashes) => {
 				return await reannounceTorrents(host, cookie, hashes)
+			},
+			/**
+			 * Edit trackers
+			 * @param {string} hash - The hash of the torrent
+			 * @param {string} origUrl - The tracker URL you want to edit
+			 * @param {string} newUrl - The new URL to replace the `origUrl`
+			 */
+			editTrackers: async (hash, origUrl, newUrl) => {
+				return await editTrackers(host, cookie, hash, origUrl, newUrl)
+			},
+			/**
+			 * Remove trackers
+			 * @param {string} hash - The hash of the torrent
+			 * @param {string} url - URLs to remove, separated by `|`
+			 */
+			removeTrackers: async (hash, urls) => {
+				return await removeTrackers(host, cookie, hash, urls)
+			},
+			/**
+			 * Add peers
+			 * @param {string} hashes - The hash of the torrent, or multiple hashes separated by a pipe `|`
+			 * @param {string} peers - The peer to add, or multiple peers separated by a pipe `|`. Each peer is a colon-separated `host:port`
+			 */
+			addPeers: async (hashes, peers) => {
+				return await addPeers(host, cookie, hashes, peers)
+			},
+			/**
+			 * Add trackers to torrent
+			 * @param {string} hash - The hash of the torrent
+			 * @param {string} urls - URLs of the trackers, separated by a newline `\n`
+			 */
+			addTrackers: async (hash, urls) => {
+				return await addTrackers(host, cookie, hash, urls)
+			},
+			/**
+			 * Increase torrent priority
+			 * @param {string} hashes - The hashes of the torrents you want to increase the priority of. It can contain multiple hashes separated by `|`, to increase the priority of multiple torrents, or set to 'all', to increase the priority of all torrents
+			 */
+			increasePriority: async (hashes) => {
+				return await increasePriority(host, cookie, hashes)
+			},
+			/**
+			 * Decrease torrent priority
+			 * @param {string} hashes - The hashes of the torrents you want to decrease the priority of. It can contain multiple hashes separated by `|`, to decrease the priority of multiple torrents, or set to 'all', to decrease the priority of all torrents
+			 */
+			decreasePriority: async (hashes) => {
+				return await decreasePriority(host, cookie, hashes)
+			},
+			/**
+			 * Maximal torrent priority
+			 * @param {string} hashes - The hashes of the torrents you want to set to the maximum priority. It can contain multiple hashes separated by `|`, to set multiple torrents to the maximum priority, or set to 'all', to set all torrents to the maximum priority
+			 */
+			maxPriority: async (hashes) => {
+				return await maxPriority(host, cookie, hashes)
+			},
+			/**
+			 * Minimal torrent priority
+			 * @param {string} hashes - The hashes of the torrents you want to set to the minimum priority. It can contain multiple hashes separated by `|`, to set multiple torrents to the minimum priority, or set to 'all', to set all torrents to the minimum priority
+			 */
+			minPriority: async (hashes) => {
+				return await minPriority(host, cookie, hashes)
+			},
+			/**
+			 * Set file priority
+			 * @param {string} hash - The hash of the torrent
+			 * @param {string} id - File ids, separated by `|`
+			 * @param {(0|1|6|7)} priority - File priority to set
+			 */
+			setFilePriority: async (hash, id, priority) => {
+				return await setFilePriority(host, cookie, hash, id, priority)
+			},
+			/**
+			 * Get torrent download limit
+			 * @param {string} hashes - The hashes of the torrents. It can contain multiple hashes separated by `|` or set to 'all'
+			 */
+			downloadLimit: async (hashes) => {
+				return await downloadLimit(host, cookie, hashes)
+			},
+			/**
+			 * Set torrent download limit
+			 * @param {string} hashes - The hashes of the torrents you want to set the download limit. It can contain multiple hashes separated by `|`, to set the download limit of multiple torrents, or set to 'all', to set all torrents the download limit
+			 * @param {string} limit - Download speed limit in bytes per second you want to set
+			 */
+			setDownloadLimit: async (hashes, limit) => {
+				return await setDownloadLimit(host, cookie, hashes, limit)
+			},
+			/**
+			 * Set torrent share limit
+			 * @param {string} hashes - The hashes of the torrents you want to set the share limit. It can contain multiple hashes separated by `|`, to set the share limit of multiple torrents, or set to 'all', to set all torrents the share limit
+			 * @param {string} ratioLimit - Max ratio the torrent should be seeded until. `-2` means the global limit should be used, `-1` means no limit
+			 * @param {string} seedingTimeLimit - Max amount of time the torrent should be seeded. `-2` means the global limit should be used, `-1` means no limit
+			 */
+			setShareLimit: async (hashes, ratioLimit, seedingTimeLimit) => {
+				return await setShareLimit(host, cookie, ratioLimit, seedingTimeLimit)
+			},
+			/**
+			 * Get torrent upload limit
+			 * @param {string} hashes - The hashes of the torrents. It can contain multiple hashes separated by `|` or set to 'all'
+			 */
+			uploadLimit: async (hashes) => {
+				return await uploadLimit(host, cookie, hashes)
+			},
+			/**
+			 * Set torrent upload limit
+			 * @param {string} hashes - The hashes of the torrents you want to set the upload limit. It can contain multiple hashes separated by `|`, to set the upload limit of multiple torrents, or set to 'all', to set all torrents the upload limit
+			 * @param {string} limit - Upload speed limit in bytes per second you want to set
+			 */
+			setUploadLimit: async (hashes, limit) => {
+				return await setUploadLimit(host, cookie, hashes, limit)
+			},
+			/**
+			 * Set torrent location
+			 * @param {string} hashes - The hashes of the torrents you want to set the location. It can contain multiple hashes separated by `|`, to set the location of multiple torrents, or set to 'all', to set all torrents the location
+			 * @param {string} location - Location to download the torrent to. If the location doesn't exist, the torrent's location is unchanged
+			 */
+			setLocation: async (hashes, location) => {
+				return await setLocation(host, cookie, hashes, location)
+			},
+			/**
+			 * Set torrent name
+			 * @param {string} hash - The hash of the torrent
+			 * @param {string} name - New torrent name
+			 */
+			rename: async (hash, name) => {
+				return await rename(hash, name)
+			},
+			/**
+			 * Set torrent category
+			 * @param {string} hashes - The hashes of the torrents you want to set the category. It can contain multiple hashes separated by `|`, to set the category of multiple torrents, or set to 'all', to set the category of all torrents
+			 * @param {string} category - The torrent category you want to set
+			 */
+			setCategory: async (hashes, category) => {
+				return await setCategory(host, cookie, hashes, category)
+			},
+			/**
+			 * Get all categories
+			 * @return {Promise<Categories>} Categories in JSON format
+			 */
+			categories: async () => {
+				return await categories(host, cookie)
+			},
+			/**
+			 * Add new category
+			 * @param {string} category - The category you want to create
+			 * @param {string} savePath - Save path of the category
+			 */
+			createCategory: async (category, savePath) => {
+				return await createCategory(host, cookie, category, savePath)
+			},
+			/**
+			 * Edit category
+			 * @param {string} category - The category you want to edit
+			 * @param {string} savePath - Save path of the category
+			 */
+			editCategory: async (category, savePath) => {
+				return await editCategory(host, cookie, category, savePath)
+			},
+			/**
+			 * Remove categories
+			 * @param {string} categories - Category you want to remove. It can contain multiple cateogies separated by a newline `\n`
+			 */
+			removeCategories: async (categories) => {
+				return await removeCategories(host, cookie, categories)
+			},
+			/**
+			 * Add torrent tags
+			 * @param {string} hashes - The hashes of the torrents you want to add tags to. It can contain multiple hashes separated by `|`, to add tags to multiple torrents, or set to 'all', to add the tags of all torrents
+			 * @param {string} tags - The list of tags you want to add to passed torrents
+			 */
+			addTags: async (hashes, tags) => {
+				return await addTags(host, cookie, hashes, tags)
+			},
+			/**
+			 * Remove torrent tags
+			 * @param {string} hashes - The hashes of the torrents you want to remove tags to. It can contain multiple hashes separated by `|`, to remove tags to multiple torrents, or set to 'all', to remove the tags of all torrents
+			 * @param {string} tags - Category you want to remove. It can contain multiple cateogies separated by a newline `\n`
+			 */
+			removeTags: async (hashes, tags) => {
+				return await removeTags(host, cookie, hashes, tags)
+			},
+			/**
+			 * Get all tags
+			 * @return {Promise<string[]>} Tags
+			 */
+			tags: async () => {
+				return await tags(host, cookie)
+			},
+			/**
+			 * Create tags
+			 * @param {string} tags - List of tags you want to create. Can contain multiple tags separated by `,`
+			 */
+			createTags: async (tags) => {
+				return await createTags(host, cookie, tags)
+			},
+			/**
+			 * Delete tags
+			 * @param {string} tags - List of tags you want to delete. Can contain multiple tags separated by `,`
+			 */
+			deleteTags: async (tags) => {
+				return await deleteTags(host, cookie, tags)
+			},
+			/**
+			 * Set automatic torrent management
+			 * @param {string} hashes - The hashes of the torrents you want to set automatic torrent management. It can contain multiple hashes separated by `|`, to set automatic torrent management of multiple torrents, or set to 'all', to set automatic torrent management of all torrents
+			 * @param {boolean} enable - Enable automatic torrent management or not for the torrents listed in `hashes`
+			 */
+			setAutoManagement: async (hashes, enable) => {
+				return await setAutoManagement(host, cookie, hashes, enable)
+			},
+			/**
+			 * Toggle sequential download
+			 * @param {string} hashes - The hashes of the torrents you want to toggle sequential download for. It can contain multiple hashes separated by `|`, to toggle sequential download for multiple torrents, or set to 'all', to toggle sequential download for all torrents
+			 */
+			toggleSequentialDownload: async (hashes) => {
+				return await toggleSequentialDownload(host, cookie, hashes)
+			},
+			/**
+			 * Set first/last piece priority
+			 * @param {string} hashes - The hashes of the torrents you want to toggle the first/last piece priority for. It can contain multiple hashes separated by `|`, to toggle the first/last piece priority for multiple torrents, or set to 'all', to toggle the first/last piece priority for all torrents
+			 */
+			toggleFirstLastPiecePrio: async (hashes) => {
+				return await toggleFirstLastPiecePrio(host, cookie, hashes)
+			},
+			/**
+			 * Set force start
+			 * @param {string} hashes - The hashes of the torrents you want to set force start. It can contain multiple hashes separated by `|`, to set force start of multiple torrents, or set to 'all', to set force start of all torrents
+			 * @param {boolean} value - Enable force start or not for the torrents listed in `hashes`
+			 */
+			setForceStart: async (hashes, value) => {
+				return await setForceStart(host, cookie, hashes, value)
+			},
+			/**
+			 * Set super seeding
+			 * @param {string} hashes - The hashes of the torrents you want to set super seeding. It can contain multiple hashes separated by `|`, to set super seeding of multiple torrents, or set to 'all', to set super seeding of all torrents
+			 * @param {boolean} value - Enable super seeding or not for the torrents listed in `hashes`
+			 */
+			setSuperSeeding: async (hashes, value) => {
+				return await setSuperSeeding(host, cookie, hashes, value)
+			},
+			/**
+			 * Rename file
+			 * @param {string} hash - The hash of the torrent
+			 * @param {number} id - The id of the file to rename
+			 * @param {string} name - The new name to use for the file
+			 */
+			renameFile: async (hash, id, name) => {
+				return await renameFile(host, cookie, hash, id, name)
 			}
 		}
 	} catch (err) {
@@ -379,56 +626,32 @@ exports.connect = async (host, username, password) => {
 // Application
 
 async function appVersion(host, cookie) {
-	try {
-		const { res } = await performRequest(host, cookie, '/app/version', {})
-		return res
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/app/version', {})
+	return res
 }
 
 async function apiVersion(host, cookie) {
-	try {
-		const { res } = await performRequest(host, cookie, '/app/webapiVersion', {})
-		return res
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/app/webapiVersion', {})
+	return res
 }
 
 async function buildInfo(host, cookie) {
-	try {
-		const { res } = await performRequest(host, cookie, '/app/buildInfo', {})
-		return JSON.parse(res)
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/app/buildInfo', {})
+	return JSON.parse(res)
 }
 
 async function shutdown(host, cookie) {
-	try {
-		await performRequest(host, cookie, '/app/shutdown', {})
-	} catch (err) {
-		throw err
-	}
+	await performRequest(host, cookie, '/app/shutdown', {})
 }
 
 async function preferences(host, cookie) {
-	try {
-		const { res } = await performRequest(host, cookie, '/app/preferences', {})
-		return JSON.parse(res)
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/app/preferences', {})
+	return JSON.parse(res)
 }
 
 async function defaultSavePath(host, cookie) {
-	try {
-		const { res } = await performRequest(host, cookie, '/app/defaultSavePath', {})
-		return res
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/app/defaultSavePath', {})
+	return res
 }
 
 // Torrent management
@@ -443,111 +666,223 @@ async function torrents(host, cookie, filter, category, sort, reverse, limit, of
 	if (offset) parameters.offset = offset
 	if (hashes) parameters.hashes = hashes
 
-	try {
-		const { res } = await performRequest(host, cookie, '/torrents/info', parameters)
-		return JSON.parse(res)
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/torrents/info', parameters)
+	return JSON.parse(res)
 }
 
 async function properties(host, cookie, hash) {
-	try {
-		const { res } = await performRequest(host, cookie, '/torrents/properties', { hash: hash })
-		return JSON.parse(res)
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/torrents/properties', { hash: hash })
+	return JSON.parse(res)
 }
 
 async function trackers(host, cookie, hash) {
-	try {
-		const { res } = await performRequest(host, cookie, '/torrents/trackers', { hash: hash })
-		return JSON.parse(res)
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/torrents/trackers', { hash: hash })
+	return JSON.parse(res)
 }
 
 async function webseeds(host, cookie, hash) {
-	try {
-		const { res } = await performRequest(host, cookie, '/torrents/webseeds', { hash: hash })
-		return JSON.parse(res)
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/torrents/webseeds', { hash: hash })
+	return JSON.parse(res)
 }
 
 async function files(host, cookie, hash) {
-	try {
-		const { res } = await performRequest(host, cookie, '/torrents/files', { hash: hash })
-		return JSON.parse(res)
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/torrents/files', { hash: hash })
+	return JSON.parse(res)
 }
 
 async function pieceStates(host, cookie, hash) {
-	try {
-		const { res } = await performRequest(host, cookie, '/torrents/pieceStates', { hash: hash })
-		return JSON.parse(res)
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/torrents/pieceStates', { hash: hash })
+	return JSON.parse(res)
 }
 
 async function pieceHashes(host, cookie, hash) {
-	try {
-		const { res } = await performRequest(host, cookie, '/torrents/pieceHashes', { hash: hash })
-		return JSON.parse(res)
-	} catch (err) {
-		throw err
-	}
+	const { res } = await performRequest(host, cookie, '/torrents/pieceHashes', { hash: hash })
+	return JSON.parse(res)
 }
 
 async function pauseTorrents(host, cookie, hashes) {
-	try {
-		await performRequest(host, cookie, '/torrents/pause', { hashes: hashes })
-		return
-	} catch (err) {
-		throw err
-	}
+	await performRequest(host, cookie, '/torrents/pause', { hashes: hashes })
+	return
 }
 
 async function resumeTorrents(host, cookie, hashes) {
-	try {
-		await performRequest(host, cookie, '/torrents/resume', { hashes: hashes })
-		return
-	} catch (err) {
-		throw err
-	}
+	await performRequest(host, cookie, '/torrents/resume', { hashes: hashes })
+	return
 }
 
 async function deleteTorrents(host, cookie, hashes, deleteFile) {
-	try {
-		await performRequest(host, cookie, '/torrents/delete', { hashes: hashes, deleteFile: deleteFile })
-		return
-	} catch (err) {
-		throw err
-	}
+	await performRequest(host, cookie, '/torrents/delete', { hashes: hashes, deleteFile: deleteFile })
+	return
 }
 
 async function recheckTorrents(host, cookie, hashes) {
-	try {
-		await performRequest(host, cookie, '/torrents/recheck', { hashes: hashes })
-		return
-	} catch (err) {
-		throw err
-	}
+	await performRequest(host, cookie, '/torrents/recheck', { hashes: hashes })
+	return
 }
 
 async function reannounceTorrents(host, cookie, hashes) {
-	try {
-		await performRequest(host, cookie, '/torrents/reannounce', { hashes: hashes })
-		return
-	} catch (err) {
-		throw err
-	}
+	await performRequest(host, cookie, '/torrents/reannounce', { hashes: hashes })
+	return
+}
+
+async function editTrackers(host, cookie, hash, origUrl, newUrl) {
+	await performRequest(host, cookie, '/torrents/editTracker', { hash: hash, origUrl: origUrl, newUrl: newUrl })
+	return
+}
+
+async function removeTrackers(host, cookie, hash, urls) {
+	await performRequest(host, cookie, '/torrents/removeTrackers', { hash: hash, urls: urls })
+	return
+}
+
+async function addPeers(host, cookie, hashes, peers) {
+	await performRequest(host, cookie, '/torrents/addPeers', { hashes: hashes, peers: peers })
+	return
+}
+
+async function addTrackers(host, cookie, hash, urls) {
+	await performRequest(host, cookie, '/torrents/addTrackers', { hash: hash, urls: encodeURI(urls) })
+	return
+}
+
+async function increasePriority(host, cookie, hashes) {
+	await performRequest(host, cookie, '/torrents/increasePrio', { hashes: hashes })
+	return
+}
+
+async function decreasePriority(host, cookie, hashes) {
+	await performRequest(host, cookie, '/torrents/decreasePrio', { hashes: hashes })
+	return
+}
+
+async function maxPriority(host, cookie, hashes) {
+	await performRequest(host, cookie, '/torrents/topPrio', { hashes: hashes })
+	return
+}
+
+async function minPriority(host, cookie, hashes) {
+	await performRequest(host, cookie, '/torrents/bottomPrio', { hashes: hashes })
+	return
+}
+
+async function setFilePriority(host, cookie, hash, id, priority) {
+	await performRequest(host, cookie, '/torrents/filePrio', { hash: hash, id: id, priority: priority })
+	return
+}
+
+async function downloadLimit(host, cookie, hashes) {
+	const { res } = await performRequest(host, cookie, '/torrents/downloadLimit', { hashes: hashes })
+	return JSON.parse(res)
+}
+
+async function setDownloadLimit(host, cookie, hashes, limit) {
+	await performRequest(host, cookie, '/torrents/setDownloadLimit', { hashes: hashes, limit: limit })
+	return
+}
+
+async function setShareLimit(host, cookie, hashes, ratioLimit, seedingTimeLimit) {
+	await performRequest(host, cookie, '/torrents/setShareLimits', { hashes: hashes, ratioLimit: ratioLimit, seedingTimeLimit: seedingTimeLimit })
+	return
+}
+
+async function uploadLimit(host, cookie, hashes) {
+	const { res } = await performRequest(host, cookie, '/torrents/uploadLimit', { hashes: hashes })
+	return JSON.parse(res)
+}
+
+async function setUploadLimit(host, cookie, hashes, limit) {
+	await performRequest(host, cookie, '/torrents/setUploadLimit', { hashes: hashes, limit: limit })
+	return
+}
+
+async function setLocation(host, cookie, hashes, location) {
+	await performRequest(host, cookie, '/torrents/setLocation', { hashes: hashes, location: location })
+	return
+}
+
+async function rename(host, cookie, hash, name) {
+	await performRequest(host, cookie, '/torrents/rename', { hash: hash, name: encodeURI(name) })
+	return
+}
+
+async function setCategory(host, cookie, hash, category) {
+	await performRequest(host, cookie, '/torrents/setCategory', { hash: hash, category: encodeURI(category) })
+	return
+}
+
+async function categories(host, cookie) {
+	const { res } = await performRequest(host, cookie, '/torrents/categories', {})
+	return JSON.parse(res)
+}
+
+async function createCategory(host, cookie, category, savePath) {
+	await performRequest(host, cookie, '/torrents/createCategory', { category: encodeURI(category), savePath: savePath })
+	return
+}
+
+async function editCategory(host, cookie, category, savePath) {
+	await performRequest(host, cookie, '/torrents/editCategory', { category: encodeURI(category), savePath: savePath })
+	return
+}
+
+async function removeCategories(host, cookie, categories) {
+	await performRequest(host, cookie, '/torrents/removeCategories', { categories: encodeURI(categories) })
+	return
+}
+
+async function addTags(host, cookie, hashes, tags) {
+	await performRequest(host, cookie, '/torrents/addTags', { hashes: hashed, tags: encodeURI(tags) })
+	return
+}
+
+async function removeTags(host, cookie, hashes, tags) {
+	await performRequest(host, cookie, '/torrents/removeTags', { hashes: hashed, tags: encodeURI(tags) })
+	return
+}
+
+async function tags(host, cookie) {
+	const { res } = await performRequest(host, cookie, '/torrents/tags', {})
+	return JSON.parse(res)
+}
+
+async function createTags(host, cookie, tags) {
+	await performRequest(host, cookie, '/torrents/createTags', { tags: encodeURI(tags) })
+	return
+}
+
+async function deleteTags(host, cookie, tags) {
+	await performRequest(host, cookie, '/torrents/deleteTags', { tags: encodeURI(tags) })
+	return
+}
+
+async function setAutoManagement(host, cookie, hashes, enable) {
+	await performRequest(host, cookie, '/torrents/setAutoManagement', { hashes: hashes, enable: enable })
+	return
+}
+
+async function toggleSequentialDownload(host, cookie, hashes) {
+	await performRequest(host, cookie, '/torrents/toggleSequentialDownload', { hashes: hashes })
+	return
+}
+
+async function toggleFirstLastPiecePrio(host, cookie, hashes) {
+	await performRequest(host, cookie, '/torrents/toggleFirstLastPiecePrio', { hashes: hashes })
+	return
+}
+
+async function setForceStart(host, cookie, hashes, value) {
+	await performRequest(host, cookie, '/torrents/setForceStart', { hashes: hashes, value: value })
+	return
+}
+
+async function setSuperSeeding(host, cookie, hashes, value) {
+	await performRequest(host, cookie, '/torrents/setSuperSeeding', { hashes: hashes, value: value })
+	return
+}
+
+async function renameFile(host, cookie, hash, id, name) {
+	await performRequest(host, cookie, '/torrents/renameFile', { hash: hash, id: id, name: encodeURI(name) })
+	return
 }
 
 // Utils functions

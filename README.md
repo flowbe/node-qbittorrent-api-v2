@@ -48,7 +48,7 @@ See [qBittorrent's API documentation](https://github.com/qbittorrent/qBittorrent
 
 `connect(host, user, password)`
 
-This method returns an object allowing to call the other methods of the API.
+This method returns a Promise resolving an object allowing to call the other methods of the API.
 
 ## Application
 
@@ -188,15 +188,15 @@ This method returns an object allowing to call the other methods of the API.
 
 ### Edit trackers
 
-**TODO**
+`editTrackers(hash, origUrl, newUrl)`
 
 ### Remove trackers
 
-**TODO**
+`removeTrackers(hash, urls)`
 
 ### Add peers
 
-**TODO**
+`addPeers(hashes, peers)`
 
 ### Add new torrent
 
@@ -204,116 +204,116 @@ This method returns an object allowing to call the other methods of the API.
 
 ### Add trackers to torrent
 
-**TODO**
+`addTrackers(hash, urls)`
 
 ### Increase torrent priority
 
-**TODO**
+`increasePriority(hashes)`
 
 ### Decrease torrent priority
 
-**TODO**
+`decreasePriority(hashes)`
 
 ### Maximal torrent priority
 
-**TODO**
+`maxPriority(hashes)`
 
 ### Minimal torrent priority
 
-**TODO**
+`minPriority(hashes)`
 
 ### Set file priority
 
-**TODO**
+`setFilePriority(hash, id, priority)`
 
 ### Get torrent download limit
 
-**TODO**
+`downloadLimit(hashes)`
 
 ### Set torrent download limit
 
-**TODO**
+`setDownloadLimit(hashes, limit)`
 
 ### Set torrent share limit
 
-**TODO**
+`setShareLimit(hashes, ratioLimit, seedingTimeLimit)`
 
 ### Get torrent upload limit
 
-**TODO**
+`uploadLimit(hashes)`
 
 ### Set torrent upload limit
 
-**TODO**
+`setUploadLimit(hashes, limit)`
 
 ### Set torrent location
 
-**TODO**
+`setLocation(hashes, location)`
 
 ### Set torrent name
 
-**TODO**
+`rename(hash, name)`
 
 ### Set torrent category
 
-**TODO**
+`setCategory(hash, category)`
 
 ### Get all categories
 
-**TODO**
+`categories()`
 
 ### Add new category
 
-**TODO**
+`createCategory(category, savePath)`
 
 ### Edit category
 
-**TODO**
+`editCategory(category, savePath)`
 
 ### Remove categories
 
-**TODO**
+`removeCategories(categories)`
 
 ### Add torrent tags
 
-**TODO**
+`addTags(hashes, tags)`
 
 ### Remove torrent tags
 
-**TODO**
+`removeTags(hashes, tags)`
 
 ### Get all tags
 
-**TODO**
+`tags()`
 
 ### Create tags
 
-**TODO**
+`createTags(tags)`
 
 ### Delete tags
 
-**TODO**
+`deleteTags(tags)`
 
 ### Set automatic torrent management
 
-**TODO**
+`setAutoManagement(hashes, enable)`
 
 ### Toggle sequential download
 
-**TODO**
+`toggleSequentialDownload(hashes)`
 
 ### Set first/last piece priority
 
-**TODO**
+`toggleFirstLastPiecePrio(hashes)`
 
 ### Set force start
 
-**TODO**
+`setForceStart(hashes, value)`
 
 ### Set super seeding
 
-**TODO**
+`setSuperSeeding(hashes, value)`
 
 ### Rename file
 
-**TODO**
+`renameFile(hash, id, name)`
