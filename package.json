@@ -1,6 +1,6 @@
 {
   "name": "qbittorrent-api-v2",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Wrapper around qBittorrent's Web API v2 to manage your torrents from Node. Documented and everything.",
   "main": "src/qbt.js",
   "directories": {
