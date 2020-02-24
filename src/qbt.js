@@ -201,6 +201,35 @@ exports.connect = async (host, username, password) => {
 				return await peerLog(host, cookie, lastKnownId)
 			},
 			/**
+			 * @typedef {Object} MainData
+			 * @property {number} rid - Response ID
+			 * @property {boolean} full_update - Whether the response contains all the data or partial data
+			 * @property {Object} torrents - Property: torrent hash, value: same as torrent list
+			 * @property {string[]} torrents_removed - List of hashes of torrents removed since last request
+			 * @property {Object} categories - Info for categories added since last request
+			 * @property {string[]} categories_removed - List of categories removed since last request
+			 * @property {string[]} tags - List of tags added since last request
+			 * @property {string[]} tags_removed - List of tags removed since last request
+			 * @property {Object} server_state - Global transfer info
+			 */
+			/**
+			 * Get main data
+			 * @param {number} rid - Response ID. If not provided, rid=0 will be assumed. If the given rid is different from the one of last server reply, `full_update` will be `true`
+			 * @return {Promise<MainData>} Main data
+			 */
+			syncMainData: async (rid) => {
+				return await syncMainData(host, cookie, rid)
+			},
+			/**
+			 * Get torrent peers data
+			 * @param {string} hash - Torrent hash
+			 * @param {number} rid - Response ID. If not provided, rid=0 will be assumed. If the given rid is different from the one of last server reply, `full_update` will be `true`
+			 * @return {Promise<PeerData>} Peer data
+			 */
+			syncPeersData: async (hash, rid) => {
+				return await syncPeersData(host, cookie, hash, rid)
+			},
+			/**
 			 * @typedef {Object} Torrent
 			 * @property {number} added_on - Time (Unix Epoch) when the torrent was added to the client
 			 * @property {number} amount_left - Amount of data left to download (bytes)
@@ -700,6 +729,22 @@ async function peerLog(host, cookie, lastKnownId) {
 	const { res } = await performRequest(host, cookie, '/log/peers', { last_known_id: lastKnownId })
 	return JSON.parse(res)
 }
+
+// Sync
+
+async function syncMainData(host, cookie, rid) {
+	const { res } = await performRequest(host, cookie, '/sync/maindata', { rid: rid })
+	return JSON.parse(res)
+}
+
+async function syncPeersData(host, cookie, hash, rid) {
+	const { res } = await performRequest(host, cookie, '/sync/torrentPeers', { hash: hash, rid: rid })
+	return JSON.parse(res)
+}
+
+// Transfer info
+
+// TODO
 
 // Torrent management
 

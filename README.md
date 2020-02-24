@@ -42,7 +42,9 @@ See [qBittorrent's API documentation](https://github.com/qbittorrent/qBittorrent
 - [Application](#application)
 - [Log](#log)
 - [Sync](#sync)
+- [Transfer info](#transfer-info)
 - [Torrent management](#torrent-management)
+- [Search](#search)
 
 ## Authentication
 
@@ -94,15 +96,13 @@ This method returns a Promise resolving an object allowing to call the other met
 
 ### Get main data
 
-**TODO**
+`syncMainData(rid)`
 
 ### Get torrent peers data
 
-**TODO**
+`syncPeersData(hash, rid)`
 
-### Transfer info
-
-**TODO**
+## Transfer info
 
 ### Get global transfer info
 
@@ -317,3 +317,49 @@ This method returns a Promise resolving an object allowing to call the other met
 ### Rename file
 
 `renameFile(hash, id, name)`
+
+## Search
+
+### Start search
+
+**TODO**
+
+### Stop search
+
+**TODO**
+
+### Get search status
+
+**TODO**
+
+### Get search results
+
+**TODO**
+
+### Delete search
+
+**TODO**
+
+### Get search categories
+
+**TODO**
+
+### Get search plugins
+
+**TODO**
+
+### Install search plugin
+
+**TODO**
+
+### Uninstall search plugin
+
+**TODO**
+
+### Enable search plugin
+
+**TODO**
+
+### Update search plugins
+
+**TODO**
