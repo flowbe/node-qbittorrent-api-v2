@@ -106,35 +106,35 @@ This method returns a Promise resolving an object allowing to call the other met
 
 ### Get global transfer info
 
-**TODO**
+`transferInfo()`
 
 ### Get alternative speed limits state
 
-**TODO**
+`speedLimitsMode()`
 
 ### Toggle alternative speed limits
 
-**TODO**
+`toggleSpeedLimitsMode()`
 
 ### Get global download limit
 
-**TODO**
+`globalDownloadLimit()`
 
 ### Set global download limit
 
-**TODO**
+`setGlobalDownloadLimit(limit)`
 
 ### Get global upload limit
 
-**TODO**
+`globalUploadLimit()`
 
 ### Set global upload limit
 
-**TODO**
+`setGlobalUploadLimit(limit)`
 
 ### Ban peers
 
-**TODO**
+`banPeers(peers)`
 
 ## Torrent management
 
@@ -322,44 +322,44 @@ This method returns a Promise resolving an object allowing to call the other met
 
 ### Start search
 
-**TODO**
+`startSearch(pattern, plugins, category)`
 
 ### Stop search
 
-**TODO**
+`stopSearch(id)`
 
 ### Get search status
 
-**TODO**
+`searchStatus([id])`
 
 ### Get search results
 
-**TODO**
+`searchResults(id, [limit], [offset])`
 
 ### Delete search
 
-**TODO**
+`deleteSearch(id)`
 
 ### Get search categories
 
-**TODO**
+`searchCategories([pluginName])`
 
 ### Get search plugins
 
-**TODO**
+`searchPlugins()`
 
 ### Install search plugin
 
-**TODO**
+`installPlugin(sources)`
 
 ### Uninstall search plugin
 
-**TODO**
+`uninstallPlugin(names)`
 
 ### Enable search plugin
 
-**TODO**
+`enablePlugin(names, enable)`
 
 ### Update search plugins
 
-**TODO**
+`updatePlugins()`

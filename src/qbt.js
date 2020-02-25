@@ -236,6 +236,72 @@ exports.connect = async (host, username, password) => {
 				return await syncPeersData(options, cookie, hash, rid)
 			},
 			/**
+			 * @typedef {Object} TransferInfo
+			 * @property {number} dl_info_speed - Global download rate (bytes/s)
+			 * @property {number} dl_info_data - Data downloaded this session (bytes)
+			 * @property {number} up_info_speed - Global upload rate (bytes/s)
+			 * @property {number} up_info_data - Data uploaded this session (bytes)
+			 * @property {number} dl_rate_limit - Download rate limit (bytes/s)
+			 * @property {number} up_rate_limit - Upload rate limit (bytes/s)
+			 * @property {number} dht_nodes - DHT nodes connected to
+			 * @property {string} connection_status - Connection status
+			 */
+			/**
+			 * Get global transfer info
+			 * @return {Promise<TransferInfo>} Transfer info
+			 */
+			transferInfo: async () => {
+				return await transferInfo(options, cookie)
+			},
+			/**
+			 * Get alternative speed limits state
+			 * @return {Promise<number>} The response is 1 if alternative speed limits are enabled, 0 otherwise
+			 */
+			speedLimitsMode: async () => {
+				return await speedLimitsMode(options, cookie)
+			},
+			/**
+			 * Toggle alternative speed limits
+			 */
+			toggleSpeedLimitsMode: async () => {
+				return await toggleSpeedLimitsMode(options, cookie)
+			},
+			/**
+			 * Get global download limit
+			 * @return {Promise<number>} Current global download speed limit in bytes/second; this value will be zero if no limit is applied
+			 */
+			globalDownloadLimit: async () => {
+				return await globalDownloadLimit(options, cookie)
+			},
+			/**
+			 * Set global download limit
+			 * @param {number} limit - The global download speed limit to set in bytes/second
+			 */
+			setGlobalDownloadLimit: async (limit) => {
+				return await setGlobalDownloadLimit(options, cookie, limit)
+			},
+			/**
+			 * Get global upload limit
+			 * @return {Promise<number>} Current global upload speed limit in bytes/second; this value will be zero if no limit is applied
+			 */
+			globalUploadLimit: async () => {
+				return await globalUploadLimit(options, cookie)
+			},
+			/**
+			 * Set global upload limit
+			 * @param {number} limit - The global upload speed limit to set in bytes/second
+			 */
+			setGlobalUploadLimit: async (limit) => {
+				return await setGlobalUploadLimit(options, cookie, limit)
+			},
+			/**
+			 * Ban peers
+			 * @param {string} peers - The peer to ban, or multiple peers separated by a pipe `|`. Each peer is a colon-separated `host:port`
+			 */
+			banPeers: async (peers) => {
+				return await banPeers(options, cookie, peers)
+			},
+			/**
 			 * @typedef {Object} Torrent
 			 * @property {number} added_on - Time (Unix Epoch) when the torrent was added to the client
 			 * @property {number} amount_left - Amount of data left to download (bytes)
@@ -685,7 +751,127 @@ exports.connect = async (host, username, password) => {
 			 */
 			renameFile: async (hash, id, name) => {
 				return await renameFile(options, cookie, hash, id, name)
-			}
+			},
+			/**
+			 * @typedef {Object} SearchJob
+			 * @property {number} id - ID of the search job
+			 */
+			/**
+			 * Start search
+			 * @param {string} pattern - Pattern to search for (e.g. "Ubuntu 18.04")
+			 * @param {string} plugins - Plugins to use for searching (e.g. "legittorrents"). Supports multiple plugins separated by `|`. Also supports 'all' and 'enabled'
+			 * @param {string} category - Categories to limit your search to (e.g. "legittorrents"). Available categories depend on the specified plugins. Also supports 'all'
+			 * @return {Promise<SearchJob>} Search ID as JSON
+			 */
+			startSearch: async (pattern, plugins, category) => {
+				return await startSearch(options, cookie, pattern, plugins, category)
+			},
+			/**
+			 * Stop search
+			 * @param {number} id - ID of the search job
+			 */
+			stopSearch: async (id) => {
+				return await stopSearch(options, cookie, id)
+			},
+			/**
+			 * @typedef {Object} SearchStatus
+			 * @property {number} id - ID of the search job
+			 * @property {string} status - Current status of the search job (either `Running` or `Stopped`)
+			 * @property {number} total - Total number of results. If the status is `Running` this number may continue to increase
+			 */
+			/**
+			 * Get search status
+			 * @param {number} [id] - ID of the search job. If not specified, all search jobs are returned
+			 * @return {Promise<SearchStatus[]>} Status of the search jobs
+			 */
+			searchStatus: async (id) => {
+				return await searchStatus(options, cookie, id)
+			},
+			/**
+			 * @typedef {Object} SearchResult
+			 * @property {string} descrLink - URL of the torrent's description page
+			 * @property {string} fileName - Name of the file
+			 * @property {number} fileSize - Size of the file in Bytes
+			 * @property {string} fileUrl - Torrent download link (usually either .torrent file or magnet link)
+			 * @property {number} nbLeechers - Number of leechers
+			 * @property {number} nbSeeders - Number of seeders
+			 * @property {string} siteUrl - URL of the torrent site
+			 */
+			/**
+			 * @typedef {Object} SearchResults
+			 * @property {SearchResult[]} results - Array of result objects
+			 * @property {string} status - Current status of the search job (either `Running` or `Stopped`)
+			 * @property {number} total - Total number of results. If the status is `Running` this number may continue to increase
+			 */
+			/**
+			 * Get search results
+			 * @param {number} id - ID of the search job
+			 * @param {number} [limit] - Max number of results to return. 0 or negative means no limit
+			 * @param {number} [offset] - Result to start at. A negative number means count backwards (e.g. -2 returns the 2 most recent results)
+			 * @return {Promise<SearchResults>} Search results
+			 */
+			searchResults: async (id, limit, offset) => {
+				return await searchResults(options, cookie, id, limit, offset)
+			},
+			/**
+			 * Delete search
+			 * @param {number} id - ID of the search job
+			 */
+			deleteSearch: async (id) => {
+				return await deleteSearch(options, cookie, id)
+			},
+			/**
+			 * Get search categories
+			 * @param {string} [pluginName] - Name of the plugin (e.g. "legittorrents"). Also supports 'all' and 'enabled'
+			 * @return {Promise<string[]>} List of categories
+			 */
+			searchCategories: async (pluginName) => {
+				return await searchCategories(options, cookie, pluginName)
+			},
+			/**
+			 * @typedef {Object} SearchPlugin
+			 * @property {boolean} enabled - Whether the plugin is enabled
+			 * @property {string} fullName - Full name of the plugin
+			 * @property {string} name - Short name of the plugin
+			 * @property {string[]} supportedCategories - List of supported categories
+			 * @property {string} url - URL of the torrent site
+			 * @property {string} version - Installed version of the plugin
+			 */
+			/**
+			 * Get search plugins
+			 * @return {Promise<SearchPlugin[]>} List of plugins
+			 */
+			searchPlugins: async () => {
+				return await searchPlugins(options, cookie)
+			},
+			/**
+			 * Install search plugin
+			 * @param {string} sources - Url or file path of the plugin to install. Supports multiple sources separated by `|`
+			 */
+			installPlugin: async (sources) => {
+				return await installPlugin(options, cookie, sources)
+			},
+			/**
+			 * Uninstall search plugin
+			 * @param {string} names - Name of the plugin to uninstall (e.g. "legittorrents"). Supports multiple names separated by `|`
+			 */
+			uninstallPlugin: async (names) => {
+				return await uninstallPlugin(options, cookie, names)
+			},
+			/**
+			 * Enable search plugin
+			 * @param {string} names - Name of the plugin to enable/disable (e.g. "legittorrents"). Supports multiple names separated by `|`
+			 * @param {boolean} enable - Whether the plugins should be enabled
+			 */
+			enablePlugin: async (names, enable) => {
+				return await enablePlugin(options, cookie, names, enable)
+			},
+			/**
+			 * Update search plugins
+			 */
+			updatePlugins: async () => {
+				return await updatePlugins(options, cookie)
+			},
 		}
 	} catch (err) {
 		console.error(err)
@@ -719,6 +905,8 @@ async function preferences(options, cookie) {
 	return JSON.parse(res)
 }
 
+// TODO: setPreferences()
+
 async function defaultSavePath(options, cookie) {
 	const { res } = await performRequest(options, cookie, '/app/defaultSavePath', {})
 	return res
@@ -750,7 +938,45 @@ async function syncPeersData(options, cookie, hash, rid) {
 
 // Transfer info
 
-// TODO
+async function transferInfo(options, cookie) {
+	const { res } = await performRequest(options, cookie, '/transfer/info', {})
+	return JSON.parse(res)
+}
+
+async function speedLimitsMode(options, cookie) {
+	const { res } = await performRequest(options, cookie, '/transfer/speedLimitsMode', {})
+	return res
+}
+
+async function toggleSpeedLimitsMode(options, cookie) {
+	await performRequest(options, cookie, '/transfer/toggleSpeedLimitsMode', {})
+	return
+}
+
+async function globalDownloadLimit(options, cookie) {
+	const { res } = await performRequest(options, cookie, '/transfer/downloadLimit', {})
+	return res
+}
+
+async function setGlobalDownloadLimit(options, cookie, limit) {
+	await performRequest(options, cookie, '/transfer/setDownloadLimit', { limit: limit })
+	return
+}
+
+async function globalUploadLimit(options, cookie) {
+	const { res } = await performRequest(options, cookie, '/transfer/uploadLimit', {})
+	return res
+}
+
+async function setGlobalUploadLimit(options, cookie, limit) {
+	await performRequest(options, cookie, '/transfer/setUploadLimit', { limit: limit })
+	return
+}
+
+async function banPeers(options, cookie, peers) {
+	await performRequest(options, cookie, '/transfer/banPeers', { peers: peers })
+	return
+}
 
 // Torrent management
 
@@ -837,6 +1063,8 @@ async function addPeers(options, cookie, hashes, peers) {
 	await performRequest(options, cookie, '/torrents/addPeers', { hashes: hashes, peers: peers })
 	return
 }
+
+// TODO: addTorrent()
 
 async function addTrackers(options, cookie, hash, urls) {
 	await performRequest(options, cookie, '/torrents/addTrackers', { hash: hash, urls: encodeURI(urls) })
@@ -980,6 +1208,73 @@ async function setSuperSeeding(options, cookie, hashes, value) {
 
 async function renameFile(options, cookie, hash, id, name) {
 	await performRequest(options, cookie, '/torrents/renameFile', { hash: hash, id: id, name: encodeURI(name) })
+	return
+}
+
+// Search
+
+async function startSearch(options, cookie, pattern, plugins, category) {
+	const { res } = await performRequest(options, cookie, '/search/start', { pattern: pattern, plugins: plugins, category: category })
+	return JSON.parse(res)
+}
+
+async function stopSearch(options, cookie, id) {
+	await performRequest(options, cookie, '/search/stop', { id: id })
+	return
+}
+
+async function searchStatus(options, cookie, id) {
+	var parameters = {}
+	if (id) parameters.id = id
+
+	const { res } = await performRequest(options, cookie, '/search/status', parameters)
+	return JSON.parse(res)
+}
+
+async function searchResults(options, cookie, id, limit, offset) {
+	var parameters = { id: id }
+	if (limit) parameters.limit = limit
+	if (offset) parameters.offset = offset
+
+	const { res } = await performRequest(options, cookie, '/search/results', parameters)
+	return JSON.parse(res)
+}
+
+async function deleteSearch(options, cookie, id) {
+	await performRequest(options, cookie, '/search/delete', { id: id })
+	return
+}
+
+async function searchCategories(options, cookie, pluginName) {
+	var parameters = {}
+	if (pluginName) parameters.pluginName = pluginName
+
+	const { res } = await performRequest(options, cookie, '/search/categories', parameters)
+	return JSON.parse(res)
+}
+
+async function searchPlugins(options, cookie) {
+	const { res } = await performRequest(options, cookie, '/search/plugins', {})
+	return JSON.parse(res)
+}
+
+async function installPlugin(options, cookie, sources) {
+	await performRequest(options, cookie, '/search/installPlugin', { sources: sources })
+	return
+}
+
+async function uninstallPlugin(options, cookie, names) {
+	await performRequest(options, cookie, '/search/uninstallPlugin', { names: names })
+	return
+}
+
+async function enablePlugin(options, cookie, names, enable) {
+	await performRequest(options, cookie, '/search/enablePlugin', { names: names, enable: enable })
+	return
+}
+
+async function updatePlugins(options, cookie) {
+	await performRequest(options, cookie, '/search/updatePlugins', {})
 	return
 }
 
