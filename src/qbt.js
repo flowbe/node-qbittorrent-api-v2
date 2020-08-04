@@ -1,4 +1,4 @@
-const https = require('https')
+const protocol = { 'https:': require('https'), 'http:': require('http') }
 
 const ENDPOINT = '/api/v2'
 
@@ -9,10 +9,11 @@ const ENDPOINT = '/api/v2'
  * @param {string} password - Password used to access the WebUI
  */
 exports.connect = async (host, username, password) => {
+	const hostname = new URL(host)
 	const options = {
-		hostname: host.replace(/https?:\/\//, '').replace(/:[0-9]*/, ''),
-		protocol: (host.startsWith('https://')) ? 'https:' : 'http:',
-		port: parseInt(host.split(':')[2]) || ((host.startsWith('https://')) ? 443 : 80)
+		hostname: hostname.host,
+		protocol: hostname.protocol,
+		port: parseInt(hostname.port) || (hostname.protocol == 'https://' ? 443 : 80)
 	}
 
 	try {
@@ -954,7 +955,7 @@ async function toggleSpeedLimitsMode(options, cookie) {
 }
 
 async function globalDownloadLimit(options, cookie) {
-	const { res } = await performRequest(options, cookie, '/transfer/downloadLimit', {})
+	const { res } = await performRequest(options, cookie, '/transfer/downloadLimit', {})
 	return res
 }
 
@@ -1299,7 +1300,7 @@ function performRequest(opt, cookie, path, parameters) {
 	}
 
 	return new Promise((resolve, reject) => {
-		const req = https.request(options, res => {
+		const req = protocol[options.protocol].request(options, res => {
 			let data = []
 
 			res.on('data', chunk => data.push(chunk))
