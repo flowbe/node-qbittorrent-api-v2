@@ -11,9 +11,9 @@ const ENDPOINT = '/api/v2'
 exports.connect = async (host, username, password) => {
 	const hostname = new URL(host)
 	const options = {
-		hostname: hostname.host,
+		hostname: hostname.hostname,
 		protocol: hostname.protocol,
-		port: parseInt(hostname.port) || (hostname.protocol == 'https://' ? 443 : 80)
+		port: parseInt(hostname.port) || (hostname.protocol == 'https:' ? 443 : 80)
 	}
 
 	try {
@@ -1292,7 +1292,7 @@ function performRequest(opt, cookie, path, parameters) {
 		method: 'POST',
 		headers: {
 			'Referer': opt.protocol + '//' + opt.hostname + ((opt.port != 80 || opt.port != 443) ? ':' + opt.port : ''),
-			'Origin': opt.protocol + '//' + opt.hostname,
+			'Origin': opt.protocol + '//' + opt.hostname + ((opt.port != 80 || opt.port != 443) ? ':' + opt.port : ''),
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Content-Length': data.length,
 			'Cookie': cookie
