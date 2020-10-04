@@ -532,6 +532,13 @@ exports.connect = async (host, username, password) => {
 				return await addPeers(options, cookie, hashes, peers)
 			},
 			/**
+			 * Add torrent
+			 * @param {string} urls - URLs of the trackers, separated by a newline `\n`
+			 */
+			addTorrent: async (urls) => {
+				return await addTorrent(options, cookie, urls)
+			},
+			/**
 			 * Add trackers to torrent
 			 * @param {string} hash - The hash of the torrent
 			 * @param {string} urls - URLs of the trackers, separated by a newline `\n`
@@ -1065,7 +1072,10 @@ async function addPeers(options, cookie, hashes, peers) {
 	return
 }
 
-// TODO: addTorrent()
+async function addTorrent(options, cookie, urls) {
+	await performRequest(options, cookie, '/torrents/add', { urls: encodeURI(urls) })
+	return
+}
 
 async function addTrackers(options, cookie, hash, urls) {
 	await performRequest(options, cookie, '/torrents/addTrackers', { hash: hash, urls: encodeURI(urls) })
