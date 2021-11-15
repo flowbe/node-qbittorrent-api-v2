@@ -487,10 +487,10 @@ exports.connect = async (host, username, password) => {
 			/**
 			 * Delete one or several torrents
 			 * @param {string} hashes - The hashes of the torrents you want to delete. It can contain multiple hashes separated by |, to delete multiple torrents, or set to 'all', to delete all torrents
-			 * @param {boolean} deleteFile - If set to `true`, the downloaded data will also be deleted, otherwise has no effect
+			 * @param {boolean} deleteFiles - If set to `true`, the downloaded data will also be deleted, otherwise has no effect
 			 */
-			deleteTorrents: async (hashes, deleteFile) => {
-				return await deleteTorrents(options, cookie, hashes, deleteFile)
+			deleteTorrents: async (hashes, deleteFiles) => {
+				return await deleteTorrents(options, cookie, hashes, deleteFiles)
 			},
 			/**
 			 * Recheck one or several torrents
@@ -1035,8 +1035,8 @@ async function resumeTorrents(options, cookie, hashes) {
 	return
 }
 
-async function deleteTorrents(options, cookie, hashes, deleteFile) {
-	await performRequest(options, cookie, '/torrents/delete', { hashes: hashes, deleteFile: deleteFile })
+async function deleteTorrents(options, cookie, hashes, deleteFiles) {
+	await performRequest(options, cookie, '/torrents/delete', { hashes: hashes, deleteFiles: deleteFiles })
 	return
 }
 
