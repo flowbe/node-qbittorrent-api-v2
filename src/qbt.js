@@ -875,7 +875,6 @@ exports.connect = async (host, username, password) => {
 			},
 		}
 	} catch (err) {
-		console.error(err)
 		throw new Error(`Login failed with username: ${username}`)
 	}
 }
