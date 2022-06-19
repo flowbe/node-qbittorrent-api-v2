@@ -1158,12 +1158,12 @@ async function removeCategories(options, cookie, categories) {
 }
 
 async function addTags(options, cookie, hashes, tags) {
-	await performRequest(options, cookie, '/torrents/addTags', { hashes: hashed, tags: encodeURI(tags) })
+	await performRequest(options, cookie, '/torrents/addTags', { hashes: hashes, tags: encodeURI(tags) })
 	return
 }
 
 async function removeTags(options, cookie, hashes, tags) {
-	await performRequest(options, cookie, '/torrents/removeTags', { hashes: hashed, tags: encodeURI(tags) })
+	await performRequest(options, cookie, '/torrents/removeTags', { hashes: hashes, tags: encodeURI(tags) })
 	return
 }
 
