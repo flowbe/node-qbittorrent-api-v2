@@ -1132,8 +1132,8 @@ async function rename(options, cookie, hash, name) {
 	return
 }
 
-async function setCategory(options, cookie, hash, category) {
-	await performRequest(options, cookie, '/torrents/setCategory', { hash: hash, category: encodeURI(category) })
+async function setCategory(options, cookie, hashes, category) {
+	await performRequest(options, cookie, '/torrents/setCategory', { hashes: hashes, category: encodeURI(category) })
 	return
 }
 
