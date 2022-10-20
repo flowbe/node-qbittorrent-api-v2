@@ -598,7 +598,7 @@ exports.connect = async (host, username, password) => {
 			 * @param {string} seedingTimeLimit - Max amount of time the torrent should be seeded. `-2` means the global limit should be used, `-1` means no limit
 			 */
 			setShareLimit: async (hashes, ratioLimit, seedingTimeLimit) => {
-				return await setShareLimit(options, cookie, ratioLimit, seedingTimeLimit)
+				return await setShareLimit(options, cookie, hashes, ratioLimit, seedingTimeLimit)
 			},
 			/**
 			 * Get torrent upload limit
